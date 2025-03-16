@@ -11,13 +11,14 @@ const fs = require('fs');
         for (const code of codes) {
             await driver.get('https://dev-shop-integration.alerabat.com/');
 
-            const input = await driver.findElement(By.className('p-2'));
+            const divContainer = await driver.findElement(By.css("main > div:nth-of-type(2)"));
+            const input = await divContainer.findElement(By.css('input'));
+
             await input.clear();
             await input.sendKeys(code);
-            await driver.findElement(By.className('bg-blue-500')).click();
+            await divContainer.findElement(By.css('button')).click();
 
-            const successMessage = await driver.findElement(By.className('font-bold')).getText();
-
+            const successMessage = await divContainer.findElement(By.css('p:nth-of-type(2)')).getText();
             if (!successMessage.includes('Do zapłaty: 100 zł')) validCodes.push(code);
         }
     }
